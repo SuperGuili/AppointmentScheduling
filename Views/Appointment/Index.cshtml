@@ -1,0 +1,38 @@
+﻿
+<div class="row">
+
+    @if (TempData.ContainsKey("newAdminSignUp"))
+    {
+        <div class="container">
+            <div class="alert alert-danger alert-dismissable">
+                <a href="#" class="close" data-dismiss="alert" aria-label="close">X</a>
+                <strong>Admin Account created for @TempData["newAdminSignUp"].ToString()</strong>
+            </div>
+        </div>
+    }
+
+    <div class="container">
+        @if (User.IsInRole(AppointmentScheduling.Utils.Helper.Admin))
+        {
+            <div class="row">
+                <div class="form-group row col-6" id="divDoctorsList">
+
+                    <label class="col-form-label mx-2">Select Doctor</label>
+
+                    @Html.DropDownList("doctorId", new SelectList(ViewBag.DoctorsList, "Id", "Name"), new
+                       {
+                           @class = "form-control select2 col-5 mx-2",
+                           @onchange = "onDoctorChange();"
+                       })
+                </div>
+                <div class="form-group row col-2 offset-4">
+                    <a asp-action="Register" asp-controller="Account" class="btn btn-secondary form-control">Register User</a>
+                </div>
+            </div>
+        }
+        <div id="calendar"></div>
+    </div>
+</div>
+
+<partial name="_AddEditAppointment" />
+

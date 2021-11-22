@@ -1,0 +1,41 @@
+﻿@model Fee
+
+<h1 class="text-center">Update Fee</h1>
+
+
+<form method="post" asp-action="UpdateFee" asp-controller="Fee">
+    <input type="hidden" asp-for="Id"/>
+    <div class="form-group">
+        <label asp-for="Description" class="col-form-label"></label>
+        <div class="">
+            <input asp-for="Description" class="form-control" placeholder="Description" />
+            <span asp-validation-for="Description" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Duration" class="col-form-label"></label>
+        <div class="">
+            <input asp-for="Duration" class="form-control" placeholder="Duration" />
+            <span asp-validation-for="Duration" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Value" class="col-form-label"></label>
+        <div class="">
+            <input type="search" asp-for="Value" class="form-control" placeholder="Value" />
+            <span asp-validation-for="Value" class="text-danger"></span>
+        </div>
+    </div>
+
+    <hr />
+
+    <div class="form-group">
+        <div class="">
+            <button type="submit" class="btn btn-success mx-3">Submit</button>
+            <a asp-action="Index" asp-controller="Fee" class="btn btn-danger mx-3">Cancel</a>
+        </div>
+    </div>
+
+</form>

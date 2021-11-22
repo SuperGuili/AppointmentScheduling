@@ -1,0 +1,245 @@
+﻿@model IEnumerable<AppointmentScheduling.Models.ViewModels.ListFinanceVM>
+
+@using X.PagedList;
+@using X.PagedList.Mvc.Core;
+
+@{
+    int countRows = ViewBag.countRows;
+
+    decimal total = 0;
+    decimal notPaid = 0;
+}
+
+<h1 class="text-center">Finances</h1>
+<hr />
+
+<form asp-action="SearchFinance" asp-controller="Finance" method="post" class="form-inline mb-2">
+    <div class="ml-auto">
+        <select class="form-control m-1" name="pageSize">
+            <option value="25">25</option>
+            <option value="50">50</option>
+            <option value="100">100</option>
+            <option value="500">500</option>
+            <option value="1000">1000</option>
+        </select>
+        <input type="text" id="searchDescription" placeholder="Description/Doctor" class="form-control" name="description">
+        <select class="form-control m-1" name="inOut">
+            <option value="">IN/OUT</option>
+            <option value="IN">IN</option>
+            <option value="OUT">OUT</option>
+        </select>
+        <select class="form-control m-1" name="isPaid">
+            <option value="">All</option>
+            <option value="PAID">PAID</option>
+            <option value="NOT">NOT</option>
+        </select>
+        <input id="startDatePicker" class="form-control m-1" style="width:auto" value="Start date" name="startDate" />
+        <input id="endDatePicker" class="form-control m-1" style="width:auto" value="End date" name="endDate" />
+        <button type="submit" class="btn btn-primary">Search</button>
+    </div>
+</form>
+
+@if (Model.Count() > 0)
+{
+    <table class="table table-striped table-sm" id="financeTable">
+        <thead>
+            <tr>
+                <th width="6%">
+                    Item
+                </th>
+                <th class="text-center" title="Description/Doctor name">
+                    Description
+                </th>
+                <th width="12%" class="text-center" title="View Details">
+                    Details
+                </th>
+                <th width="12%" class="text-center" title="Paid Date">
+                    Date
+                </th>
+                <th width="8%" class="text-center" title="PAID/NOT">
+                    Paid
+                </th>
+                <th width="8%" class="text-center" title="IN/OUT">
+                    Type
+                </th>
+                <th width="10%" class="text-center" title="Amount">
+                    Amount
+                </th>
+            </tr>
+        </thead>
+
+        <tbody>
+            @foreach (var item in Model)
+            {
+                if (item.Amount != 0)
+                {
+                    countRows += 1;
+
+                    @if (item.IncomeIsPaid)
+                    {
+                        total = item.Amount + total;
+                    }
+                    else
+                    {
+                        notPaid = item.Amount + notPaid;
+                    }
+
+                    <tr>
+                        <td>
+                            @countRows.ToString("D4")
+                        </td>
+                        <td>
+                            @item.Description
+                        </td>
+                        <td class="text-center">
+
+                            @if (item.AppointmentId == 0)
+                            {
+                                <input type="button" id="@item.ExpenseId" value="View"
+                                       class="btn btn-primary btn-sm " onclick="loadDetailsModal(@item.ExpenseId, false);" />
+                            }
+                            else
+                            {
+                                <input type="button" id="@item.AppointmentId" value="View"
+                                       class="btn btn-primary btn-sm " onclick="loadDetailsModal(@item.AppointmentId, true);" />
+                            }
+
+                        </td>
+                        <td class="text-center">
+                            @item.Date.ToShortDateString()
+                        </td>
+                        <td class="text-center">
+                            @if (item.IncomeIsPaid)
+                            {
+                                <span style="color: green">Paid</span>
+                            }
+                            else
+                            {
+                                <span style="color: darkred">NOT</span>
+                            }
+                        </td>
+                        <td class="text-center">
+                            @if (item.Type == "IN")
+                            {
+                                <span style="color: green">@item.Type</span>
+                            }
+                            @if (item.Type == "OUT")
+                            {
+                                <span style="color: darkred">@item.Type</span>
+                            }
+                        </td>
+                        <td class="text-right">
+                            @if (item.Amount >= 0)
+                            {
+                                <span style="color: green">@item.Amount</span>
+                            }
+                            @if (item.Amount < 0)
+                            {
+                                <span style="color: darkred">@item.Amount</span>
+                            }
+                        </td>
+                    </tr>
+
+                }
+            }
+        </tbody>
+
+        <tfoot>
+            <tr></tr>
+            <tr>
+                <td></td>
+                <td style="color: darkred"><strong>Total Not Paid: £ @notPaid.ToString()</strong> </td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td>
+                    @if (total > 0)
+                    {
+                        <strong style="color: green">Total:</strong>
+                    }
+                    else
+                    {
+                        <strong style="color: darkred">Total:</strong>
+                    }
+                </td>
+                <td class="text-right" style="color: green">
+                    @if (total > 0)
+                    {
+                        <strong class="text-right" style="color: green">£ @total.ToString()</strong>
+                    }
+                    else
+                    {
+                        <strong class="text-right" style="color: darkred">£ @total.ToString()</strong>
+                    }
+                </td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>
+                    @if (notPaid.ToString() == "0")
+                    {
+                        <strong style="color: green">Total to receive: £ 0.00</strong>
+                    }
+                    else
+                    {
+                        <strong style="color: darkred">Total to receive: £ @(notPaid + total)</strong>
+                    }
+                </td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+        </tfoot>
+
+    </table>
+
+    <!--////////////-------- Start of Pagination -----------////////-->
+
+
+    <div class="pagination">
+
+        @if (ViewBag.isSearch == null)
+        {
+            @Html.PagedListPager((IPagedList)Model, page => Url.Action("Index", new { pageNum = page }),
+               new X.PagedList.Web.Common.PagedListRenderOptions
+                {
+                   DisplayItemSliceAndTotal = true,
+                   ContainerDivClasses = new[] { "navigation" },
+                   LiElementClasses = new[] { "page-item" },
+                   PageClasses = new[] { "page-link" }
+                })
+        }
+        else
+        {
+            @Html.PagedListPager((IPagedList)Model, page => Url.Action("SearchFinance",
+                new
+                     {
+                         pageNum = page,
+                         pageSize = ViewBag.pageSize,
+                         description = ViewBag.description,
+                         startDate = ViewBag.startDate,
+                         endDate = ViewBag.endDate,
+                         inOut = ViewBag.inOut,
+                         isPaid = ViewBag.isPaid
+                    }),
+
+              new X.PagedList.Web.Common.PagedListRenderOptions
+              {
+                  DisplayItemSliceAndTotal = true,
+                  ContainerDivClasses = new[] { "navigation" },
+                  LiElementClasses = new[] { "page-item" },
+                  PageClasses = new[] { "page-link" }
+              })
+        }
+
+    </div>
+    <!--////////////-------- End of Pagination -------------////////-->
+}
+else
+{
+    <h1 class="text-center text-danger">No results</h1>
+}
+
+<partial name="_FinanceDetails" />

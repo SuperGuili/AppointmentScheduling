@@ -1,0 +1,63 @@
+﻿@model Expense
+
+
+<div class="row">
+    <div class="col-6">
+        <h3 class="mx-5">Add Expense</h3>
+    </div>
+
+    <div class="col-6 text-right">
+        <a asp-action="AddExpenseType" asp-controller="Expense" class="btn btn-success mx-5">Add Expense Type</a>
+    </div>
+</div>
+
+<form method="post" asp-action="AddExpense" asp-controller="Expense">
+
+    <input type="hidden" asp-for="ExpenseUserId" value="@ViewBag.LoginUserId"/>
+
+    <div class="form-group">
+        <label asp-for="ExpenseDescription" class="col-form-label"></label>
+        <div class="">
+            <input asp-for="ExpenseDescription" class="form-control" placeholder="Description" />
+            <span asp-validation-for="ExpenseDescription" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="ExpenseType" class="col-form-label"></label>
+        <div class="">
+            <select asp-for="ExpenseType"
+                    asp-items="@ViewBag.ExpenseTypeList"
+                    
+                    class="form-control">                
+            </select>
+            <span asp-validation-for="ExpenseType" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="ExpenseDate" class="col-form-label"></label>
+        <div class="">
+            <input asp-for="ExpenseDate" class="form-control" placeholder="Date" />
+            <span asp-validation-for="ExpenseDate" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="ExpenseAmount" class="col-form-label"></label>
+        <div class="">
+            <input asp-for="ExpenseAmount" class="form-control" placeholder="Amount" />
+            <span asp-validation-for="ExpenseAmount" class="text-danger"></span>
+        </div>
+    </div>
+
+    <hr />
+
+    <div class="form-group">
+        <div class="">
+            <button type="submit" class="btn btn-success mx-3">Submit</button>
+            <a asp-action="Index" asp-controller="Expense" class="btn btn-danger mx-3">Cancel</a>
+        </div>
+    </div>
+
+</form>

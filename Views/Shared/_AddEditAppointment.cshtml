@@ -1,0 +1,128 @@
+﻿
+
+<div class="modal fade" role="dialog" id="appointmentInput" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form id="appointmentForm" autocomplete="off" novalidate="novalidate">
+
+                <div class="modal-header">
+                    @if (User.IsInRole(AppointmentScheduling.Utils.Helper.Admin))
+                    {
+                        <h4 class="modal-title" id="modalTitle">Add or Edit Appointment</h4>
+                    }
+                    else
+                    {
+                        <h4 class="modal-title">Appointment Details</h4>
+                    }
+                </div>
+
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="title">Title</label>
+                        <input type="text" maxlength="100" class="form-control" id="title" />
+                    </div>
+                    <div class="form-group">
+                        <label for="description">Description</label>
+                        <textarea type="text" class="form-control" id="description"></textarea>
+                    </div>
+
+                    @if (User.IsInRole(AppointmentScheduling.Utils.Helper.Admin))
+                    {
+                        <div class="form-group">
+                            <label for="patientId">Select Patient</label>
+                            <select id="patientId" asp-items="@(new SelectList(ViewBag.PatientsList, "Id", "Name"))" class="form-control"></select>
+                        </div>
+
+                        <div class="form-group form-row">
+
+                            <div class="form-group col-6">
+                                <label for="lblStatus" class="">Status</label>
+                                <label disabled class="form-control" id="lblStatus" />
+                            </div>
+
+                            <div class="form-group col-6">
+                                <label for="telephone">Contact Number</label>
+                                <label disabled id="telephone" class="form-control" />
+                            </div>
+                        </div>
+                    }
+                    else
+                    {
+                        @if (User.IsInRole(AppointmentScheduling.Utils.Helper.Doctor))
+                        {
+                            <div class="form-group">
+                                <label for="lblPatientName">Patient Name</label>
+                                <label disable class="form-control" id="lblPatientName" />
+                            </div>
+                            <div class="form-group">
+                                <label for="lblStatus">Status</label>
+                                <label disable class="form-control" id="lblStatus" />
+                            </div>
+                        }
+                        @if (User.IsInRole(AppointmentScheduling.Utils.Helper.Patient))
+                        {
+                            <div class="form-group">
+                                <label for="lblDoctorName">Doctor Name</label>
+                                <label disable class="form-control" id="lblDoctorName" />
+                            </div>
+                            <div class="form-group">
+                                <label for="lblStatus">Status</label>
+                                <label disable type="text" class="form-control" id="lblStatus" />
+                            </div>
+                        }
+                    }
+
+                    <div class="form-group">
+                        <label for="appointmentDate">Start Date Time</label>
+                        <input class="form-control" id="appointmentDate" />
+                    </div>
+
+                    <div class="form-group form-row">
+
+                        <div class="form-group col-6">
+                            <label for="duration" class="">Duration</label>
+                            <select id="duration" asp-items="@ViewBag.Duration" class="form-control select2"
+                                    onchange="onDurationChange();"></select>
+                        </div>
+                        <div class="form-group col-6">
+                            <label for="value" class="">Value</label>
+                            @Html.DropDownList("value", new SelectList(ViewBag.Value, "Value", "Value"), new
+                           {
+                               @class = "form-control select2"
+                           })
+                        </div>
+
+                    </div>
+
+                    <input type="hidden" id="id" />
+                    <input type="hidden" id="doctorApproved" />
+                    <input type="hidden" id="isPaid" />
+
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" onclick="onCloseModal();">Close</button>
+
+                    @if (User.IsInRole(AppointmentScheduling.Utils.Helper.Admin))
+                    {
+                        <button type="button" id="btnSubmit" class="btn btn-success" onclick="onSubmitForm();">Submit</button>
+                        <button type="button" id="btnUpdate" class="btn btn-success" onclick="onSubmitForm();">Update</button>
+
+                        <button type="button" id="btnConfirm" class="btn btn-success" onclick="onConfirm();">Confirm</button>
+                        <button type="button" id="btnPay" class="btn btn-primary" onclick="onPay();">Pay</button>
+
+                        <button type="button" id="btnDelete" class="btn btn-danger" onclick="onDeleteAppointment();">Delete</button>
+                    }
+
+                    @if (User.IsInRole(AppointmentScheduling.Utils.Helper.Doctor))
+                    {
+                        <button type="button" id="btnConfirm" class="btn btn-success" onclick="onConfirm();">Confirm</button>
+                        <button type="button" id="btnDelete" class="btn btn-danger" onclick="onDeleteAppointment();">Delete</button>
+                    }
+
+                </div>
+
+            </form>
+        </div>
+    </div>
+</div>

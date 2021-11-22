@@ -1,0 +1,97 @@
+﻿<div class="modal fade" role="dialog" id="appointmentDetails" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form id="appointmentDetailsForm" autocomplete="off" novalidate="novalidate">
+
+                <div class="modal-header">
+                    <h4 class="modal-title">Appointment Finance Details</h4>
+                </div>
+
+                <div class="modal-body">
+
+                    <div class="form-group row">
+
+                        <div class="col-6">
+                            <label for="title">Title</label>
+                            <label disable class="form-control" id="title" />
+                        </div>
+                        <div class="col-6">
+                            <label for="paidOn">Paid on</label>
+                            <label disable class="form-control" id="paidOn" />
+                        </div>
+
+                    </div>
+
+                    <div class="form-group">
+
+                        <label for="description">Description</label>
+                        <textarea readonly class="form-control" id="description"></textarea>
+
+                    </div>                    
+
+                    <div class="form-group row">
+
+                        <div class="col-6">
+                            <label for="lblPatientName">Patient Name</label>
+                            <label disable class="form-control" id="lblPatientName" />
+                        </div>
+
+                        <div class="col-6">
+                            <label for="lblDoctorName">Doctor Name</label>
+                            <label disable class="form-control" id="lblDoctorName" />
+                        </div>
+
+                    </div>
+
+                    <div class="form-group form-row">
+
+                        <div class="col-6">
+                            <label for="AdminName">Admin Name</label>
+                            <label disable class="form-control" id="AdminName" />
+                        </div>
+
+                        <div class="col-6">
+                            <label for="lblStatus">Status</label>
+                            <label disable class="form-control" id="lblStatus" />
+                        </div>
+
+                    </div>                    
+
+                    <div class="form-group form-row">
+
+                        <div class="col-6">
+                            <label for="startDate">Start Time</label>
+                            <label disable class="form-control" id="startDate" />
+                        </div>
+                        <div class="col-6">
+                            <label for="telephone">Patient Tel.</label>
+                            <label disable class="form-control" id="telephone" />
+                        </div>
+
+                    </div>
+
+                    <div class="form-group form-row">
+
+                        <div class="col-6">
+                            <label for="duration" class="">Duration</label>
+                            <label disable class="form-control" id="duration" />
+                        </div>
+
+                        <div class="col-6">
+                            <label for="value" class="">Value</label>
+                            <label disable class="form-control" id="value" />
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" onclick="closeDetailsModal();">Close</button>
+
+                </div>
+
+            </form>
+        </div>
+    </div>
+</div>

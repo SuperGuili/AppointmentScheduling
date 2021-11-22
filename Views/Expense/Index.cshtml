@@ -1,0 +1,68 @@
+﻿@model IEnumerable<AppointmentScheduling.Models.ViewModels.ListExpenseVM>
+
+<div class="row">
+    <div class="col-6">
+        <h3 class="mx-5">Expenses List</h3>
+    </div>
+
+    <div class="col-6 text-right">
+        <a asp-action="AddExpense" asp-controller="Expense" class="btn btn-success mx-5">Add Expense</a>
+    </div>
+</div>
+<hr />
+
+@if (@Model != null)
+{
+    <table class="table table-bordered table-striped table-sm">
+        <thead>
+            <tr>
+                <th class="text-center">
+                    Description
+                </th>
+                <th width="20%" class="text-center">
+                    Type
+                </th>
+                <th width="10%" class="text-center">
+                    Date
+                </th>
+                <th width="10%" class="text-center">
+                    Amount
+                </th>
+                <th width="15%" class="text-center">
+                    Action
+                </th>
+            </tr>
+        </thead>
+
+        <tbody>
+            @foreach (var expense in Model)
+            {
+                <tr>
+                    <td>@expense.ExpenseDescription</td>
+                    <td>@expense.ExpenseType</td>
+                    <td>@expense.ExpenseDate</td>
+                    <td class="text-right">@expense.ExpenseAmount</td>
+                    <td>
+                        <div class="text-center">
+                            <form asp-action="DeleteExpense" asp-route-id="@expense.Id" method="post">
+                                <a class="btn btn-primary btn-sm" asp-action="UpdateExpense" asp-controller="Expense"
+                                   asp-route-id="@expense.Id">Update</a>
+
+                                <button class="btn btn-danger btn-sm" type="submit" asp-action="DeleteExpense" asp-controller="Expense"
+                                        asp-route-id="@expense.Id">
+                                    Delete
+                                </button>
+                            </form>
+                        </div>
+                    </td>
+
+                </tr>
+            }
+        </tbody>
+
+    </table>
+}
+else
+{
+    <h1>No Results</h1>
+}

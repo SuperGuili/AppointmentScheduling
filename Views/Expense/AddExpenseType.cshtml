@@ -1,0 +1,30 @@
+﻿@model ExpenseType
+
+<div class="row">
+    <div class="col-6">
+        <h3 class="mx-5">Add Expense Type</h3>
+    </div>
+</div>
+
+<form method="post" asp-action="AddExpenseType" asp-controller="Expense">
+
+    <div class="form-group">
+        <label asp-for="ExpenseTypeDescription" class="col-form-label"></label>
+        <div class="">
+            <input asp-for="ExpenseTypeDescription" class="form-control" placeholder="Description" />
+            <span asp-validation-for="ExpenseTypeDescription" class="text-danger"></span>
+        </div>
+    </div>
+
+
+    <hr />
+
+    <div class="form-group">
+        <div class="">
+            <button type="submit" class="btn btn-success mx-3">Submit</button>
+            <a asp-action="AddExpense" asp-controller="Expense" class="btn btn-danger mx-3">Cancel</a>
+        </div>
+    </div>
+
+</form>
+
