@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using AppointmentScheduling.Models.StoredProcedures;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -23,6 +24,8 @@ namespace AppointmentScheduling.Models
         public DbSet<Expense> Expenses { get; set; }
 
         public DbSet<ExpenseType> ExpenseTypes { get; set; }
-        
+
+        public DbSet<SP_SelectAllUsers> SP_SelectAllUsers { get; set; }
+
     }
 }
