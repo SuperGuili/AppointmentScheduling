@@ -1,7 +1,9 @@
+using AppointmentScheduling.Configuration;
 using AppointmentScheduling.DbInitialSeed;
 using AppointmentScheduling.Models;
 using AppointmentScheduling.Services;
 using AppointmentScheduling.Utils;
+using ChustaSoft.Tools.SecureConfig;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -20,22 +22,28 @@ namespace AppointmentScheduling
 {
     public class Startup
     {
+        private IConfiguration Configuration;
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
-        }
-
-        public IConfiguration Configuration { get; }
+        }        
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.SetUpSecureConfig<AppSettings>(Configuration, Configuration["SECRET_KEY"]);
 
-            services.AddDbContext<ApplicationDbContext>(options =>
-            options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"))
-            );
+            services.AddDbContext<ApplicationDbContext>(options => {
+                //options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"))
 
-            services.AddControllersWithViews();
+                var connectString = services.SetUpSecureConfig<AppSettings>
+                    (Configuration, Configuration["SECRET_KEY"]).ConnectionStrings.Values.First();
+
+                options.UseSqlServer(connectString);
+            });
+
+            services.AddControllersWithViews();            
 
             services.AddIdentity<ApplicationUser, IdentityRole>(options =>
             {
@@ -55,7 +63,18 @@ namespace AppointmentScheduling
 
             services.AddScoped<IDbInitializer, DbInitializer>();
 
-            services.Configure<AppSettings>(Configuration.GetSection("EmailSenderApi"));
+            services.Configure<AppSettings>(options =>
+            {
+                var apiKey = services.SetUpSecureConfig<AppSettings>
+                    (Configuration, Configuration["SECRET_KEY"]).apiKey;
+                var apiSecret = services.SetUpSecureConfig<AppSettings>
+                    (Configuration, Configuration["SECRET_KEY"]).apiSecret;
+
+                options.apiKey = apiKey;
+                options.apiSecret = apiSecret;
+
+            });
+                
 
             services.AddDistributedMemoryCache();
             services.AddSession(options => 

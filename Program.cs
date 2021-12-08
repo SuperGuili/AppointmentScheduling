@@ -1,3 +1,5 @@
+using AppointmentScheduling.Configuration;
+using ChustaSoft.Tools.SecureConfig;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
@@ -13,7 +15,10 @@ namespace AppointmentScheduling
     {
         public static void Main(string[] args)
         {
-            CreateHostBuilder(args).Build().Run();
+            CreateHostBuilder(args)
+                .Build()
+                .EncryptSettings<AppSettings>(true)
+                .Run();
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
